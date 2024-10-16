@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import {
   Card,
   CardContent,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  TextField,
   Typography,
   Stepper,
   Step,
@@ -14,9 +10,8 @@ import {
   LinearProgress,
   createTheme,
   ThemeProvider,
-  StepConnector,
 } from '@mui/material';
-import { styled } from '@mui/system'; // Replacing @mui/styles
+import { styled } from '@mui/system';
 import PersonIcon from '@mui/icons-material/Person';
 import HomeIcon from '@mui/icons-material/Home';
 import StarIcon from '@mui/icons-material/Star';
@@ -27,10 +22,10 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#008080', // Teal color
+      main: '#800080', // Purple color
     },
     secondary: {
-      main: '#FF6347', // Red color for accents
+      main: '#D8BFD8', // Light purple for accents
     },
   },
   typography: {
@@ -39,45 +34,36 @@ const theme = createTheme({
   },
 });
 
-// Custom connector using styled
-const CustomStepConnector = styled(StepConnector)(({ theme }) => ({
-  alternativeLabel: {
-    top: 22,
-  },
-  active: {
-    '& .MuiStepConnector-line': {
-      backgroundColor: theme.palette.primary.main, // Glowing line when active
-    },
-  },
-  completed: {
-    '& .MuiStepConnector-line': {
-      backgroundColor: theme.palette.primary.main, // Glowing line when completed
-    },
-  },
-  line: {
-    height: 3,
-    border: 0,
-    backgroundColor: '#ccc',
-    borderRadius: 1,
-  },
+// Styled components
+const QuestionContainer = styled('div')(({ selected }) => ({
+  backgroundColor: selected ? '#90EE90' : '#800080', // Light green if selected, purple otherwise
+  borderRadius: '8px',
+  padding: '10px',
+  margin: '10px 0',
+  color: '#fff', // White text
+  fontWeight: 'bold',
+  transition: 'background-color 0.3s',
+  cursor: 'pointer',
+  width: '100%', // Full width of the parent
+  boxSizing: 'border-box', // Ensures padding is included in width calculation
+}));
+
+const CircleIcon = styled('div')(({ active }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: active ? '#800080' : '#B0B0B0', // Purple if active, grey otherwise
+  borderRadius: '50%', // Circular shape
+  width: '40px', // Circle diameter
+  height: '40px', // Circle diameter
+  margin: '0 auto', // Center the icon
 }));
 
 const steps = [
-  { label: 'Basic Info', icon: <PersonIcon /> },
-  { label: 'Spending', icon: <HomeIcon /> },
-  { label: 'Relationships', icon: <StarIcon /> },
+  { label: 'Basic Info', icon: <PersonIcon style={{ color: 'white' }} /> },
+  { label: 'Spending', icon: <HomeIcon style={{ color: 'white' }} /> },
+  { label: 'Relationships', icon: <StarIcon style={{ color: 'white' }} /> },
 ];
-
-// Styled component for the glowing icon
-const GlowingIcon = styled('div')(() => ({
-  display: 'inline-flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  borderRadius: '50%',
-  padding: '10px',
-  backgroundColor: '#008080', // Solid green color
-  color: '#fff', // Icon color
-}));
 
 const QuestionCard = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -100,23 +86,20 @@ const QuestionCard = () => {
   });
 
   const questions = [
-    // Basic Info Questions
     [
-      { question: 'What is your age?', type: 'text', name: 'age' },
+      { question: 'What is your age?', type: 'radio', name: 'age', options: ['Under 18', '18-25', '26-35', '36-45', '46+'] },
       { question: 'What is your sex?', type: 'radio', name: 'sex', options: ['Male', 'Female', 'Other'] },
       { question: 'Income Frequency?', type: 'radio', name: 'incomeFrequency', options: ['Monthly', 'Annually'] },
-      { question: 'What is your income amount?', type: 'text', name: 'incomeAmount' },
+      { question: 'What is your income range?', type: 'radio', name: 'incomeAmount', options: ['Below $20k', '$20k-$50k', '$50k-$100k', '$100k+'] },
     ],
-    // Spending Questions
     [
-      { question: 'Total monthly expenses?', type: 'text', name: 'totalMonthlyExpenses' },
-      { question: 'Rent/Mortgage expense?', type: 'text', name: 'rentMortgage' },
-      { question: 'Dining out expenses?', type: 'text', name: 'diningOut' },
-      { question: 'Entertainment expenses?', type: 'text', name: 'entertainment' },
-      { question: 'Health/Beauty/Fitness expenses?', type: 'text', name: 'healthBeautyFitness' },
-      { question: 'Shopping expenses (non-grocery)?', type: 'text', name: 'shopping' },
+      { question: 'Total monthly expenses?', type: 'radio', name: 'totalMonthlyExpenses', options: ['Below $1000', '$1000-$2000', '$2000-$4000', '$4000+'] },
+      { question: 'Rent/Mortgage expense?', type: 'radio', name: 'rentMortgage', options: ['Below $500', '$500-$1000', '$1000-$2000', '$2000+'] },
+      { question: 'Dining out expenses?', type: 'radio', name: 'diningOut', options: ['Below $100', '$100-$300', '$300-$500', '$500+'] },
+      { question: 'Entertainment expenses?', type: 'radio', name: 'entertainment', options: ['Below $100', '$100-$300', '$300-$500', '$500+'] },
+      { question: 'Health/Beauty/Fitness expenses?', type: 'radio', name: 'healthBeautyFitness', options: ['Below $100', '$100-$300', '$300-$500', '$500+'] },
+      { question: 'Shopping expenses (non-grocery)?', type: 'radio', name: 'shopping', options: ['Below $100', '$100-$300', '$300-$500', '$500+'] },
     ],
-    // Relationships Questions
     [
       { question: 'What is your marital status?', type: 'radio', name: 'maritalStatus', options: ['Single', 'Married', 'Divorced'] },
       { question: 'Do you have kids?', type: 'radio', name: 'hasKids', options: ['Yes', 'No'] },
@@ -137,17 +120,11 @@ const QuestionCard = () => {
     if (currentQuestionIndex < questions[activeStep].length - 1) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
     } else {
-      // Log data to console or handle final submission
-      console.log('Final Form Data:', formData);
-
-      // Move to the next step
-      if (activeStep < steps.length - 1) {
-        setCurrentQuestionIndex(0);
-        setActiveStep((prevStep) => prevStep + 1);
-      } else {
-        // Reset or finish the questionnaire if at the last step
+      // Check if the current step is the last step
+      if (activeStep === steps.length - 1) {
+        console.log('Final Form Data:', formData);
         alert('Thank you for completing the questions!');
-        // Optional: Reset state for a new round of questions
+        // Reset the form state
         setActiveStep(0);
         setCurrentQuestionIndex(0);
         setFormData({
@@ -166,9 +143,15 @@ const QuestionCard = () => {
           hasPets: '',
           solidGroupOfFriends: '',
         });
+      } else {
+        // Move to the next step
+        console.log('Final Form Data:', formData);
+        setCurrentQuestionIndex(0);
+        setActiveStep((prevStep) => prevStep + 1);
       }
     }
   };
+  
 
   const handlePrev = () => {
     if (currentQuestionIndex > 0) {
@@ -185,98 +168,62 @@ const QuestionCard = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      {/* Body background color */}
-      <div style={{ backgroundColor: '#f0f0f0', minHeight: '100vh', padding: '20px' }}>
+      <div style={{ backgroundColor: '#f5f5f5', minHeight: '100vh', padding: '20px' }}>
         <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-          {/* Stepper with glowing icons and lines */}
-          <Stepper
-            activeStep={activeStep}
-            alternativeLabel
-            connector={<CustomStepConnector />} // Use custom connector
-            style={{ marginBottom: '20px' }}
-          >
+          <Stepper activeStep={activeStep} alternativeLabel style={{ marginBottom: '20px' }}>
             {steps.map((step, index) => (
               <Step key={step.label}>
-                <StepLabel
-                  StepIconProps={{
-                    style: {
-                      color: (index < activeStep) ? theme.palette.primary.main : '#ccc',
-                    },
-                  }}
-                >
-                  {step.label}
+                <StepLabel>
+                  <CircleIcon active={index <= activeStep}>
+                    {React.cloneElement(step.icon, {
+                      style: {
+                        color: index <= activeStep ? 'white' : 'white', // White icon color
+                      },
+                    })}
+                  </CircleIcon>
                 </StepLabel>
               </Step>
             ))}
           </Stepper>
 
-          {/* Icon and text below the stepper component */}
-          <div style={{ textAlign: 'center', margin: '20px 0' }}>
-            <GlowingIcon>
-              {steps[activeStep].icon} {/* Render the icon based on active step */}
-            </GlowingIcon>
-            <Typography
-              variant="h6" // Change variant for different text sizes
-              style={{
-                fontWeight: 'bold', // Make text bold
-                fontSize: '24px', // Change font size as needed
-                color: '#333', // Change text color as needed
-                marginTop: '10px', // Space above the text
-              }}
-            >
-              {/* Change this question according to your requirement */}
-              {activeStep === 0
-                ? 'What would you like to know about your basic info?'
-                : activeStep === 1
-                ? 'What would you like to know about your spending?'
-                : 'What would you like to know about your relationships?'}
-            </Typography>
-          </div>
-
-          {/* Question card */}
-          <Card style={{ boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
+          <Card style={{ boxShadow: '0 4px 8px rgba(0,0,0,0.1)', maxWidth: '500px', margin: '0 auto' }}>
             <CardContent>
               <Typography variant="h6" style={{ marginBottom: '10px' }}>
                 {activeStep === 0 ? 'Basic Info' : activeStep === 1 ? 'Spending' : 'Relationships'}
               </Typography>
-              
-              {/* Progress bar for the current question */}
-              <LinearProgress variant="determinate" value={((currentQuestionIndex + 1) / getQuestionCount(activeStep)) * 100} />
 
-              {/* Render the current question */}
-              <Typography style={{ margin: '20px 0' }}>
+              <LinearProgress
+                variant="determinate"
+                value={((currentQuestionIndex + 1) / getQuestionCount(activeStep)) * 100}
+                style={{ marginBottom: '10px' }}
+              />
+
+              <Typography variant="body1" style={{ marginBottom: '10px' }}>
+                {`${currentQuestionIndex + 1} / ${getQuestionCount(activeStep)}`}
+              </Typography>
+
+              <Typography variant="h6" style={{ marginBottom: '10px' }}>
                 {questions[activeStep][currentQuestionIndex].question}
               </Typography>
 
-              {/* Render input fields based on question type */}
-              {questions[activeStep][currentQuestionIndex].type === 'text' ? (
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  name={questions[activeStep][currentQuestionIndex].name}
-                  value={formData[questions[activeStep][currentQuestionIndex].name] || ''}
-                  onChange={handleChange}
-                />
-              ) : (
-                <RadioGroup
-                  name={questions[activeStep][currentQuestionIndex].name}
-                  value={formData[questions[activeStep][currentQuestionIndex].name] || ''}
-                  onChange={handleChange}
-                >
-                  {questions[activeStep][currentQuestionIndex].options.map((option) => (
-                    <FormControlLabel key={option} control={<Radio />} label={option} value={option} />
-                  ))}
-                </RadioGroup>
-              )}
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {questions[activeStep][currentQuestionIndex].options.map((option) => (
+                  <QuestionContainer
+                    key={option}
+                    selected={formData[questions[activeStep][currentQuestionIndex].name] === option}
+                    onClick={() => handleChange({ target: { name: questions[activeStep][currentQuestionIndex].name, value: option } })}
+                  >
+                    {option}
+                  </QuestionContainer>
+                ))}
+              </div>
 
-              {/* Navigation buttons */}
               <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between' }}>
                 <Button
                   variant="contained"
                   color="primary"
                   startIcon={<ArrowBackIosIcon />}
                   onClick={handlePrev}
-                  disabled={activeStep === 0 && currentQuestionIndex === 0}
                 >
                   Prev
                 </Button>
