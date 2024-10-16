@@ -6,10 +6,11 @@ import QuestionCard from "./QuestionCard"
 
 export default function page(){
   return(
-     <>  
+     <>   
          <ResponsiveAppBar/>
          <QuestionCard/>
          <ResponsiveFooter/>
+         
     </>
   )
 
